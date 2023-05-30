@@ -1,0 +1,6 @@
+GET https://hubeau.eaufrance.fr/api/v1/niveaux_nappes/stations
+  ?date_recherche=2023-04-30
+  &code_bss=05797X0145/FPZ
+  &fields=code_bss,x,y,date_debut_mesure,date_fin_mesure
+  #&size=10
+  #&page=3
