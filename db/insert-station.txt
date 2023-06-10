@@ -1,0 +1,16 @@
+INSERT INTO stations (
+  id,
+  name,
+  x,
+  y,
+  first_measure,
+  latest_measure
+)
+VALUES (
+'05797X0145/FPZ',
+'Saint-Cyr',
+4.910881756,
+46.661542516,
+'1996-11-14',
+'2023-05-15'
+)

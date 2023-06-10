@@ -1,0 +1,1 @@
+docker run --name pgsql -v pgsql:/var/lib/postgresql/data -e POSTGRES_PASSWORD=admin --restart=always -p 5432:5432 postgres

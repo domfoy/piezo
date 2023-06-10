@@ -1,0 +1,61 @@
+CREATE TABLE stations (
+  first_measure date,
+  latest_measure date,
+  name varchar(100),
+  station_id varchar(80),
+  x double precision,
+  y double precision,
+)
+
+###
+
+CREATE TABLE measures (
+  date date,
+  date_id integer,
+  interpolated boolean,
+  percent double precision,
+  station_id varchar(80),
+  value  double precision,
+  year integer,
+)
+
+###
+
+CREATE TABLE chronicles (
+  year integer,
+  station_id varchar(80),
+  min_value double precision,
+  max_value double precision,
+)
+
+###
+
+CREATE TABLE batches (
+  batch_id oid,
+  max_value double precision,
+  median_percent double precision,
+  min_value double precision,
+  p1_value double precision,
+  p99_value double precision,
+  station_id varchar(80),
+)
+
+###
+
+CREATE TABLE batches_to_years (
+  batch_id oid,
+  year integer,
+)
+
+###
+
+CREATE TABLE stats (
+  batch_id oid,
+  date_id integer,
+  max_percent double precision,
+  median_percent double precision,
+  min_percent double precision,
+  p50_to_median_percent double precision,
+  p75_to_median_percent double precision,
+  p90_to_median_percent double precision,
+)
