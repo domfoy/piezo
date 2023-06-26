@@ -1,37 +1,31 @@
 "use client"
 
-import h337 from 'heatmap.js';
-import {useEffect, useRef} from 'react';
+import {useEffect} from 'react';
+import L from 'leaflet';
+import {MapContainer, TileLayer, useMap} from 'react-leaflet';
 
-const points = [...Array(10).keys()]
-  .map((v, index) => ({
-    x: 100 + 500 * index / 10,
-    y: 200,
-    value: index % 2
-      ? 100
-      : 50
-  }));
+import 'leaflet/dist/leaflet.css';
+import geoJson from './data/metropole-et-outre-mer.geojson';
 
-const testData = {
-  max: 100,
-  min: 0,
-  data: points
-};
-
-
-export default function Home() {
-  const containerRef = useRef(null);
+function MyComponent() {
+  const map = useMap();
 
   useEffect(() => {
-    const heatMapConfig = {
-      container: containerRef.current
-    };
-    const instance = h337.create(heatMapConfig);
+    L.geoJSON(geoJson).addTo(map);
+  }, [map])
+  return null;
+}
 
-    instance.setData(testData);
-  });
-
-  return <div ref={containerRef}>
-    <canvas width="800" height="600"></canvas>
-  </div>
+export default function Home() {
+  return <MapContainer
+    center={[45, 0]}
+    zoom={13}
+    style={{
+      height: '100vh',
+      width: '100%'
+    }}
+  >
+    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <MyComponent></MyComponent>
+  </MapContainer>;
 }
