@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 numpy = "*"
 psycopg = {extras = ["binary"], version = "*"}
+turfpy = "*"
+geojson = "*"
 
 [dev-packages]
 
