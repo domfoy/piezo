@@ -10,10 +10,14 @@
   },
   "dependencies": {
     "chart.js": "^4.3.0",
+    "d3": "^7.8.5",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
+    "heatmap.js": "^2.0.5",
+    "leaflet": "^1.9.4",
     "next": "13.4.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1"
   }
 }

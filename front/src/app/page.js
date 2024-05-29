@@ -1,93 +1,103 @@
 "use client"
 
-import {useEffect, useRef} from 'react';
-import styles from './page.module.css';
-import Chart from 'chart.js/auto';
+import {useEffect} from 'react';
+import L from 'leaflet';
+import {MapContainer, TileLayer, useMap} from 'react-leaflet';
 
-// import data from './data/09724X0023_P2_processed.json';
-import data from './data/03423X0056_100_processed.json';
+import 'leaflet/dist/leaflet.css';
+import geoJson from './data/metropole-et-outre-mer.geojson';
+import voronoi from './data/voronoi.geojson';
+import stations from './data/station.geojson';
 
-function clamp(min, max) {
-  return value => {
-    if (value < min) {
-      return min;
-    }
-    if (value > max) {
-      return max;
-    }
-    return value;
-  };
+function getSiteLong(feature) {
+  return feature.properties.site.coordinates[0];
 }
 
-const claimPercent = clamp(0, 100);
+function toHexaString(float) {
+  const int = Math.floor(float * 255);
 
-console.log('data', data)
+  return Number(int).toString(16).padStart(2, '0');
+}
 
-const PERCENTILES = {
-  '50': {
-    name: 'percentile50',
-    color: 'rgb(0, 100, 200)'
-  },
-  '75': {
-    name: 'percentile75',
-    color: 'rgb(0, 50, 220)'
-  },
-  // '90': 'percentile90'
-};
-
-export default function Home() {
-  const canvasRef = useRef(null);
-
-  const renderChart = () => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const percentileDataSets = [];
-
-    for (const percentileKey in PERCENTILES) {
-      percentileDataSets.push({
-        label: `high-${percentileKey}th percentile to median`,
-        data: data.stats.map(row => claimPercent(100 * (row.median + row[PERCENTILES[percentileKey].name]))),
-        borderColor: PERCENTILES[percentileKey].color
-      });
-      percentileDataSets.push({
-        label: `low-${percentileKey}th percentile to median`,
-        data: data.stats.map(row => claimPercent(100 * (row.median - row[PERCENTILES[percentileKey].name]))),
-        borderColor: PERCENTILES[percentileKey].color
-      });
-    }
-    const chartConfig = {
-      type: 'line',
-      data: {
-        labels: data.stats.map((row, id) => id),
-        datasets: [
-          {
-            label: 'Current year',
-            data: data.current_year.map(row => row.percent * 100),
-            borderColor: 'rgb(255, 0, 0)'
-          },
-          {
-            label: 'Median',
-            data: data.stats.map(row => row.median * 100),
-            borderColor: 'rgb(0, 255, 255)'
-          },
-          ...percentileDataSets
-        ]
-      }
-    };
-
-    new Chart(canvasRef.current, chartConfig);
-  };
+function MyComponent() {
+  const map = useMap();
 
   useEffect(() => {
-    renderChart();
+    const sitesLong = voronoi.features.map(feature => getSiteLong(feature));
+    const minLong = Math.min(...sitesLong);
+    const maxLong = Math.max(...sitesLong);
 
-    return () => destroyChart();
-  }, []);
+    const markerIcon = L.icon({
+      iconUrl: '/marker.svg',
+      iconSize: [25, 25 ]
+    });
+    // L.geoJSON(geoJson).addTo(map);
+    L.geoJSON(
+      voronoi,
+      {
+        onEachFeature: (feature, layer) => {
+          const siteInfo = feature.properties.site.properties.site;
 
-  return (
-    <main className={styles.main}>
-      <canvas ref={canvasRef}></canvas>
-    </main>
-  )
+          layer.bindPopup(`<b>${siteInfo.nom_commune}</b><br>${siteInfo.date_debut_mesure} - ${siteInfo.date_fin_mesure}<br>${siteInfo.code_bss}`);
+
+          let marker;
+
+          layer.on('mouseover', () => {
+            if (marker) {
+              return;
+            }
+            const coord = feature.properties.site.coordinates;
+
+            marker = L.marker(
+              {
+                lng: coord[0],
+                lat: coord[1]
+              },
+              {
+                icon: markerIcon
+              }
+            );
+
+            marker.addTo(map);
+            console.log('created marker')
+          })
+          layer.on('mouseleave', () => {
+            if (!marker) {
+              return;
+            }
+            marker.remove();
+            console.log('removed marker')
+          })
+        },
+        style: feature => {
+          const t = (getSiteLong(feature) - minLong) / (maxLong - minLong);
+          const redComp = 1 - t;
+          const blueComp = t;
+
+          return {
+            // color: `#${toHexaString(redComp)}00${toHexaString(blueComp)}`,
+            // stroke: false
+          };
+        }
+      }
+    ).addTo(map);
+    // L.geoJSON(
+    //   stations
+    // ).addTo(map);
+  }, [map])
+  return null;
+}
+
+export default function Home() {
+  return <MapContainer
+    center={[45, 0]}
+    zoom={13}
+    style={{
+      height: '100vh',
+      width: '100%'
+    }}
+  >
+    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <MyComponent></MyComponent>
+  </MapContainer>;
 }

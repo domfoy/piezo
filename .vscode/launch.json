@@ -8,9 +8,10 @@
       "name": "Python: Current File",
       "type": "python",
       "request": "launch",
-      "program": "data",
+      "program": "${file}",
+      "purpose":["debug-test"],
       "console": "integratedTerminal",
-      "justMyCode": true
+      "justMyCode": false
     }
   ]
 }

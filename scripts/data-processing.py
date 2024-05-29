@@ -172,6 +172,13 @@ def read_measures(file_path):
   with open(file_path, "r") as file_as_str:
     return json.load(file_as_str)["data"]
 
+def process_station_data(file_path):
+  measures = read_measures(file_path)
+  stats = process_measures(measures)
+  output_path = f"{file_path}_processed"
+  with open(output_path, "w") as output_file:
+    json.dump(stats, fp=output_file, default=serializeJson)
+
 if __name__ == "__main__":
   measures = read_measures("data/03423X0056_100.json")
   stats = process_measures(measures)
