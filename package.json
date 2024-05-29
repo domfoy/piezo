@@ -1,0 +1,28 @@
+{
+  "name": "piezo",
+  "version": "0.1.0",
+  "description": "https://www.brgm.fr/fr/actualite/communique-presse/nappes-eau-souterraine-au-1er-avril-2024",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domfoy/piezo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/domfoy/piezo/issues"
+  },
+  "homepage": "https://github.com/domfoy/piezo#readme",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.3.0",
+    "eslint": "^9.3.0",
+    "globals": "^15.3.0"
+  }
+}
