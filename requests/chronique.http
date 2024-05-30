@@ -1,7 +1,7 @@
 GET https://hubeau.eaufrance.fr/api/v1/niveaux_nappes/chroniques
   #?code_bss=09724X0023/P2
-  ?code_bss=03423X0056/100
-  &date_debut_mesure=2010-01-01
+  ?code_bss=07208X0197/F1C
+  &date_debut_mesure=2000-01-01
   &fields=date_mesure,niveau_nappe_eau
-  #&size=10
+  # &size=2
   #&page=3

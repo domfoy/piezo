@@ -1,0 +1,6 @@
+GET https://hubeau.eaufrance.fr/api/v1/niveaux_nappes/stations
+  ?date_recherche=2000-01-01
+  &bbox=-0.62,44.82,4.28,47.70
+  &fields=code_bss,nom_commune,x,y,date_debut_mesure,date_fin_mesure
+  #&size=10
+  #&page=3
